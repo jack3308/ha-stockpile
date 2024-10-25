@@ -1,0 +1,10 @@
+{
+  "domain": "stockpile",
+  "name": "Stockpile",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "",
+  "iot_class": "calculated",
+  "requirements": [],
+  "version": "2024.10.05"
+}

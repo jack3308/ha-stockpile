@@ -1,0 +1,16 @@
+expend_stock:
+  name: Expend Stock
+  description: Expend a certain quantity of stock in a pile
+  target:
+    entity:
+      integration: stockpile
+      domain: number
+  fields:
+    quantity:
+      name: Quantity
+      description: Quantity of stock to be expended
+      required: true
+      selector:
+        number:
+          min: 0.0
+          mode: box
