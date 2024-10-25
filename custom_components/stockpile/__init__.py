@@ -31,14 +31,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         """Handle the service call."""
         LOGGER.debug("Service call received: %s", call)
         
-        # The entity_id is in the service call data
-        entity = call.data.get("entity_id")
+        # Get the target entity from call.target
+        entity = call.target.get("entity_id")
         if not entity:
             raise ServiceValidationError(
                 "No target entity specified",
                 translation_domain=DOMAIN,
                 translation_key="no_target",
             )
+        
+        # If multiple entities were targeted, use the first one
+        if isinstance(entity, list):
+            entity = entity[0]
         
         quantity = call.data["quantity"]
         LOGGER.debug("Processing expend_stock: entity=%s, quantity=%s", entity, quantity)
