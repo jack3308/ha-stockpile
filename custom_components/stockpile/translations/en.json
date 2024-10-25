@@ -1,71 +1,59 @@
 {
-  "config": {
-    "step": {
-      "user": {
-        "title": "Create Pile",
-        "description": "Set up a new stockpile",
-        "data": {
-          "pile_of": "Item Name",
-          "pile_size": "Initial Quantity",
-          "step_size": "Consumption Step Size"
-        }
-      }
-    }
-  },
-  "services": {
-    "expend_stock": {
-      "name": "Expend Stock",
-      "description": "Expend a certain quantity of stock in a pile",
-      "fields": {
-        "quantity": {
-          "name": "Quantity",
-          "description": "Quantity of stock to be expended"
-        }
-      }
-    }
-  },
-  "entity": {
-    "number": {
-      "stockpile": {
-        "state_attributes": {
-          "step": {
-            "name": "Step Size",
-            "state": "The minimum quantity that can be expended at once"
-          }
-        }
-      }
-    }
-  },
-  "issues": {
-    "no_target": {
-      "title": "No Target Entity",
-      "fix_flow": {
+    "config": {
         "step": {
-          "confirm": {
-            "description": "No target entity was specified for the service call"
-          }
+            "user": {
+                "title": "Add Stockpile",
+                "description": "Set up a new stockpile to track",
+                "data": {
+                    "pile_of": "Name of item to track",
+                    "pile_size": "Initial quantity",
+                    "step_size": "Increment/decrement step size"
+                }
+            }
         }
-      }
     },
-    "entity_not_found": {
-      "title": "Entity not found",
-      "fix_flow": {
-        "step": {
-          "confirm": {
-            "description": "The specified entity could not be found"
-          }
+    "services": {
+        "expend_stock": {
+            "name": "Expend Stock",
+            "description": "Expend a certain quantity of stock from a pile",
+            "fields": {
+                "quantity": {
+                    "name": "Quantity",
+                    "description": "Quantity of stock to be expended"
+                }
+            }
         }
-      }
     },
-    "insufficient_stock": {
-      "title": "Insufficient Stock",
-      "fix_flow": {
-        "step": {
-          "confirm": {
-            "description": "Cannot expend more stock than available in the pile"
-          }
+    "issues": {
+        "no_target": {
+            "title": "No target entity specified",
+            "fix_flow": {
+                "step": {
+                    "confirm": {
+                        "description": "Please specify a target entity when calling the service"
+                    }
+                }
+            }
+        },
+        "entity_not_found": {
+            "title": "Entity not found",
+            "fix_flow": {
+                "step": {
+                    "confirm": {
+                        "description": "The specified entity could not be found"
+                    }
+                }
+            }
+        },
+        "insufficient_stock": {
+            "title": "Insufficient stock",
+            "fix_flow": {
+                "step": {
+                    "confirm": {
+                        "description": "Cannot expend more stock than available"
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }

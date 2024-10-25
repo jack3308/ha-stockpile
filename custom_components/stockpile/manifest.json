@@ -1,9 +1,9 @@
 {
   "domain": "stockpile",
   "name": "Stockpile",
-  "codeowners": [],
+  "codeowners": ["@jack3308"],
   "config_flow": true,
-  "documentation": "",
+  "documentation": "https://github.com/jack3308/ha-stockpile",
   "iot_class": "calculated",
   "requirements": [],
   "version": "2024.10.05"

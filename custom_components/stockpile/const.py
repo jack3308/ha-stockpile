@@ -1,5 +1,6 @@
 """Constants for stockpile."""
 from logging import Logger, getLogger
+from importlib.metadata import version
 
 LOGGER: Logger = getLogger(__package__)
 DOMAIN = "stockpile"
@@ -13,14 +14,7 @@ CONF_STEP_SIZE = "step_size"
 SERVICE_EXPEND_STOCK = "expend_stock"
 
 # Version displayed in UI
-from homeassistant.util import package
-
-from importlib.metadata import version
-
-DOMAIN = "stockpile"
 try:
     VERSION = version(DOMAIN)
 except Exception:  # pylint: disable=broad-except
-    VERSION = "2024.10.06"  # fallback if installed incorrectly
-
-# Remove DISPLAY_VERSION since we'll use VERSION instead
+    VERSION = "2024.1.0"  # fallback if installed incorrectly

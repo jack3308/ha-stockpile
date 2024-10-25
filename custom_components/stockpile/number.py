@@ -12,13 +12,12 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
-from .const import CONF_PILE_OF, CONF_PILE_SIZE, CONF_STEP_SIZE, DOMAIN
 from .const import (
-    CONF_PILE_OF, 
-    CONF_PILE_SIZE, 
-    CONF_STEP_SIZE, 
+    CONF_PILE_OF,
+    CONF_PILE_SIZE,
+    CONF_STEP_SIZE,
     DOMAIN,
-    VERSION
+    VERSION,
 )
 
 
@@ -63,7 +62,8 @@ class StockpileNumber(RestoreNumber, NumberEntity):
         self._attr_device_info = {
             "identifiers": {(DOMAIN, entry_id)},
             "name": name,
-            "model": "Stockpile",
+            "manufacturer": "Home Assistant Community",
+            "model": "Stockpile Integration",
             "sw_version": VERSION,
         }
 
