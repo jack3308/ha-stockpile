@@ -7,6 +7,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall, callback
 from homeassistant.exceptions import ServiceValidationError
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.helpers import entity_platform
 
 from .const import (
@@ -41,8 +42,42 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 translation_key="invalid_quantity",
             )
 
+        entity_reg = er.async_get(hass)
+        device_reg = dr.async_get(hass)
+        
+        # Get all target entities
+        target_entities = []
+        
+        # Handle entity targets
+        if "entity_id" in call.data:
+            target_entities.extend(call.data["entity_id"])
+            
+        # Handle device targets
+        if "device_id" in call.data:
+            for device_id in call.data["device_id"]:
+                # Get all entities for this device
+                device_entities = er.async_entries_for_device(
+                    entity_reg,
+                    device_id,
+                    include_disabled_entities=False,
+                )
+                # Only include number entities from our integration
+                target_entities.extend(
+                    entity.entity_id
+                    for entity in device_entities
+                    if entity.domain == Platform.NUMBER
+                    and entity.platform == DOMAIN
+                )
+
+        if not target_entities:
+            raise ServiceValidationError(
+                "No valid targets specified",
+                translation_domain=DOMAIN,
+                translation_key="no_target",
+            )
+
         # Process each entity
-        for entity_id in call.data["entity_id"]:
+        for entity_id in target_entities:
             state = hass.states.get(entity_id)
             if not state:
                 raise ServiceValidationError(
