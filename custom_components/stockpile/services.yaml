@@ -5,8 +5,6 @@ expend_stock:
     entity:
       integration: stockpile
       domain: number
-    device:
-      integration: stockpile
   fields:
     quantity:
       name: Quantity
