@@ -5,7 +5,7 @@ from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.core import HomeAssistant, ServiceCall, callback
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import entity_platform
 
@@ -28,31 +28,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    @callback
     async def expend_stock(call: ServiceCall) -> None:
         """Handle the service call."""
         LOGGER.debug("Service call received: %s", call)
         
-        # Get the target entities from call.target
-        entities = call.target.get("entity_id")
-        if not entities:
-            raise ServiceValidationError(
-                "No target entity specified",
-                translation_domain=DOMAIN,
-                translation_key="no_target",
-            )
-        
-        # Ensure entities is always a list
-        if not isinstance(entities, list):
-            entities = [entities]
-            
-        if not entities:  # Check if the list is empty
-            raise ServiceValidationError(
-                "No target entity specified",
-                translation_domain=DOMAIN,
-                translation_key="no_target",
-            )
-        
-        # Get the quantity from the service call data
         quantity = float(call.data.get("quantity", 0))
         if quantity <= 0:
             raise ServiceValidationError(
@@ -61,10 +41,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 translation_key="invalid_quantity",
             )
 
-        LOGGER.debug("Processing expend_stock for entities: %s, quantity=%s", entities, quantity)
-        
         # Process each entity
-        for entity_id in entities:
+        for entity_id in call.data["entity_id"]:
             state = hass.states.get(entity_id)
             if not state:
                 raise ServiceValidationError(
